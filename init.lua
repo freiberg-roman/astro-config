@@ -9,20 +9,14 @@ return {
     pin_plugins = nil, -- nil, true, false (nil will pin plugins on stable only)
     skip_prompts = false, -- skip prompts about breaking changes
     show_changelog = true, -- show the changelog after performing an update
-    auto_quit = false, -- automatically quit the current session after a successful update
-    remotes = { -- easily add new remotes to track
-      --   ["remote_name"] = "https://remote_url.come/repo.git", -- full remote url
-      --   ["remote2"] = "github_user/repo", -- GitHub user/repo shortcut,
-      --   ["remote3"] = "github_user", -- GitHub user assume AstroNvim fork
+    auto_quit = true, -- automatically quit the current session after a successful update
+    remotes = {
     },
   },
 
-  -- Set colorscheme to use
-  colorscheme = "astrodark",
-
   -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
   diagnostics = {
-    virtual_text = true,
+    virtual_text = false,
     underline = true,
   },
 
@@ -50,7 +44,7 @@ return {
     },
     -- enable servers that you already have installed without mason
     servers = {
-      -- "pyright"
+      "pyright"
     },
   },
 
@@ -69,17 +63,5 @@ return {
   -- augroups/autocommands and custom filetypes also this just pure lua so
   -- anything that doesn't fit in the normal config locations above can go here
   polish = function()
-    -- Set up custom filetypes
-    -- vim.filetype.add {
-    --   extension = {
-    --     foo = "fooscript",
-    --   },
-    --   filename = {
-    --     ["Foofile"] = "fooscript",
-    --   },
-    --   pattern = {
-    --     ["~/%.config/foo/.*"] = "fooscript",
-    --   },
-    -- }
   end,
 }
