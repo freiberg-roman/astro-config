@@ -30,6 +30,20 @@ return {
     -- tables with the `name` key will be registered with which-key if it's installed
     -- this is useful for naming menus
     ["<leader>b"] = { name = "Buffers" },
+    ["<leader>dfu"] = {
+      function()
+        require("dap").up()
+      end,
+      desc = "Go up a frame",
+
+    },
+    ["<leader>dfd"] = {
+      function()
+        require("dap").down()
+      end,
+      desc = "Go down a frame",
+
+    }
     -- quick save
     -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
   },
