@@ -20,34 +20,6 @@ return {
     underline = true,
   },
 
-  lsp = {
-    -- customize lsp formatting options
-    formatting = {
-      -- control auto formatting on save
-      format_on_save = {
-        enabled = true, -- enable or disable format on save globally
-        allow_filetypes = { -- enable format on save for specified filetypes only
-          -- "go",
-        },
-        ignore_filetypes = { -- disable format on save for specified filetypes
-          -- "python",
-        },
-      },
-      disabled = { -- disable formatting capabilities for the listed language servers
-        -- disable lua_ls formatting capability if you want to use StyLua to format your lua code
-        -- "lua_ls",
-      },
-      timeout_ms = 1000, -- default format timeout
-      -- filter = function(client) -- fully override the default formatting function
-      --   return true
-      -- end
-    },
-    -- enable servers that you already have installed without mason
-    servers = {
-      "pyright"
-    },
-  },
-
   -- Configure require("lazy").setup() options
   lazy = {
     defaults = { lazy = true },
@@ -59,9 +31,44 @@ return {
     },
   },
 
-  -- This function is run last and is a good place to configuring
-  -- augroups/autocommands and custom filetypes also this just pure lua so
-  -- anything that doesn't fit in the normal config locations above can go here
   polish = function()
+    -- load in module from .vim/dap.lua
+    -- set dap.adapters = ...
+
+    -- if .vim/dap.lua does not exist use default configuration
+    local dap = require("dap")
+    dap.adapters.python = {
+      type = "executable",
+      command = "/usr/bin/python3",
+      args = { "-m", "debugpy.adapter" },
+    }
+    dap.configurations.python = {
+        {
+          type = "python", 
+          request = "launch",
+          name = "Launch file",
+          -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
+          program = "${file}", -- This configuration will launch the current file if used.
+          pythonPath = function()
+            local conda_prefix = os.getenv("CONDA_PREFIX")
+            if conda_prefix then
+              return conda_prefix .. "/bin/python"
+            else
+              local cwd = vim.fn.getcwd()
+              if vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
+                return cwd .. "/venv/bin/python"
+              elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
+                return cwd .. "/.venv/bin/python"
+              else
+                return "/usr/bin/python"
+              end
+            end
+          end,
+          cwd = function()
+            return vim.fn.getcwd()
+          end,
+        },
+      -- other configurations...
+    }
   end,
 }
