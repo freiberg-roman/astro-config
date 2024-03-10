@@ -33,6 +33,9 @@ return {
               end
             end
           end,
+          cwd = function()
+            return vim.fn.getcwd()
+          end,
         },
       },
     },
